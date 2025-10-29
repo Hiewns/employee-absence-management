@@ -1,0 +1,34 @@
+# Build directories
+build/
+dist/
+nbbuild/
+
+# NetBeans private files
+nbproject/private/
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+*.iml
+.idea/
+.vscode/
+
+# Temporary files
+*~
+*.swp
+*.bak
+*.tmp
+*.temp
