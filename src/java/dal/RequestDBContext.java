@@ -115,7 +115,23 @@ public class RequestDBContext extends DBContext<Request> {
 
     @Override
     public void update(Request model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "UPDATE RequestForLeave SET status = ? WHERE rid = ?";
+        PreparedStatement stm = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, model.getStatus());
+            stm.setInt(2, model.getId());
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stm != null) stm.close();
+                closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(RequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
