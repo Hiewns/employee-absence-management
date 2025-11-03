@@ -16,11 +16,40 @@ import model.Request;
  *
  * @author ultsu
  */
-public class RequestDBContext extends DBContext<Request>{
+public class RequestDBContext extends DBContext<Request> {
 
     @Override
     public ArrayList<Request> list() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<Request> requests = new ArrayList<>();
+        try {
+            String sql = """
+                         SELECT [rid]
+                               ,[created_by]
+                               ,[created_time]
+                               ,[from]
+                               ,[to]
+                               ,[reason]
+                               ,[status]
+                           FROM [dbo].[RequestForLeave]""";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                Request rq = new Request();
+                rq.setId(rs.getInt("rid"));
+                rq.setCreatedby(rs.getInt("created_by"));
+                rq.setCreatedtime(rs.getTimestamp("created_time"));
+                rq.setFrom(rs.getDate("from"));
+                rq.setTo(rs.getDate("to"));
+                rq.setReason(rs.getString("reason"));
+                rq.setStatus(rs.getInt("status"));
+                requests.add(rq);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
+        }
+        return requests;
     }
 
     @Override
@@ -41,7 +70,7 @@ public class RequestDBContext extends DBContext<Request>{
             stm.setString(5, model.getReason());
             stm.setInt(6, model.getStatus());
             stm.executeUpdate();
-            
+
             // Retrieve the auto-generated ID
             ResultSet rs = stm.getGeneratedKeys();
             if (rs.next()) {
@@ -64,5 +93,5 @@ public class RequestDBContext extends DBContext<Request>{
     public void delete(Request model) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 }
