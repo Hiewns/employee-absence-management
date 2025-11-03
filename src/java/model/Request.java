@@ -18,6 +18,24 @@ public class Request extends BaseModel{
     private java.sql.Date to;
     private String reason;
     private int status;
+    private int reviewedby;
+    private java.sql.Timestamp reviewedtime;
+
+    public int getReviewedby() {
+        return reviewedby;
+    }
+
+    public void setReviewedby(int reviewedby) {
+        this.reviewedby = reviewedby;
+    }
+
+    public Timestamp getReviewedtime() {
+        return reviewedtime;
+    }
+
+    public void setReviewedtime(Timestamp reviewedtime) {
+        this.reviewedtime = reviewedtime;
+    }
 
     public int getCreatedby() {
         return createdby;
