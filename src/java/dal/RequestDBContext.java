@@ -30,6 +30,8 @@ public class RequestDBContext extends DBContext<Request> {
                                ,[to]
                                ,[reason]
                                ,[status]
+                               ,[reviewed_by]
+                               ,[reviewed_time]
                            FROM [dbo].[RequestForLeave]""";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
@@ -42,6 +44,8 @@ public class RequestDBContext extends DBContext<Request> {
                 rq.setTo(rs.getDate("to"));
                 rq.setReason(rs.getString("reason"));
                 rq.setStatus(rs.getInt("status"));
+                rq.setReviewedby(rs.getInt("reviewed_by"));
+                rq.setReviewedtime(rs.getTimestamp("reviewed_time"));
                 requests.add(rq);
             }
         } catch (SQLException ex) {
@@ -56,19 +60,12 @@ public class RequestDBContext extends DBContext<Request> {
     public Request get(int id) {
         Request rq = null;
         try {
-            String sql = """
-                         SELECT [rid]
-                               ,[created_by]
-                               ,[created_time]
-                               ,[from]
-                               ,[to]
-                               ,[reason]
-                               ,[status]
-                           FROM [dbo].[RequestForLeave]
-                           WHERE rid = ?""";
+            String sql = "SELECT rid, created_by, created_time, [from], [to], reason, status, reviewed_by, reviewed_time FROM RequestForLeave WHERE rid = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+
+            if (rs.next()) {
                 rq = new Request();
                 rq.setId(rs.getInt("rid"));
                 rq.setCreatedby(rs.getInt("created_by"));
@@ -77,6 +74,8 @@ public class RequestDBContext extends DBContext<Request> {
                 rq.setTo(rs.getDate("to"));
                 rq.setReason(rs.getString("reason"));
                 rq.setStatus(rs.getInt("status"));
+                rq.setReviewedby(rs.getInt("reviewed_by"));
+                rq.setReviewedtime(rs.getTimestamp("reviewed_time"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(RequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -88,16 +87,18 @@ public class RequestDBContext extends DBContext<Request> {
 
     @Override
     public void insert(Request model) {
-        String sql = "INSERT INTO RequestForLeave([created_by], [created_time], [from], [to], reason, status) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement stm = null;
+        String sql = "INSERT INTO RequestForLeave([created_by], [created_time], [from], [to], reason, status, reviewed_by, reviewed_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try {
-            stm = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, model.getCreatedby());
             stm.setTimestamp(2, model.getCreatedtime());
             stm.setDate(3, model.getFrom());
             stm.setDate(4, model.getTo());
             stm.setString(5, model.getReason());
             stm.setInt(6, model.getStatus());
+            stm.setInt(7, model.getReviewedby());
+            stm.setTimestamp(8, model.getCreatedtime());
             stm.executeUpdate();
 
             // Retrieve the auto-generated ID
@@ -115,22 +116,19 @@ public class RequestDBContext extends DBContext<Request> {
 
     @Override
     public void update(Request model) {
-        String sql = "UPDATE RequestForLeave SET status = ? WHERE rid = ?";
+        String sql = "UPDATE RequestForLeave SET status = ?, reviewed_by = ?, reviewed_time = ? WHERE rid = ?";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
             stm.setInt(1, model.getStatus());
-            stm.setInt(2, model.getId());
+            stm.setInt(2, model.getReviewedby());
+            stm.setTimestamp(3, model.getReviewedtime());
+            stm.setInt(4, model.getId());
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                if (stm != null) stm.close();
-                closeConnection();
-            } catch (SQLException ex) {
-                Logger.getLogger(RequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            closeConnection();
         }
     }
 
