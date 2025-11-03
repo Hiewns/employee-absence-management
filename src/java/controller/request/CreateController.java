@@ -43,6 +43,7 @@ public class CreateController extends BaseRequiredAuthorizationController {
 
         RequestDBContext db = new RequestDBContext();
         db.insert(rq);
+        req.getRequestDispatcher("/view/request/list.jsp").forward(req, resp);
     }
 
     @Override
