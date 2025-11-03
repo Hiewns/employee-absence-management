@@ -4,12 +4,12 @@
  */
 package dal;
 
-import java.util.ArrayList;
-import model.iam.User;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Employee;
+import model.iam.User;
 
 /**
  *
@@ -35,25 +35,22 @@ public class UserDBContext extends DBContext<User> {
             stm.setString(1, username);
             stm.setString(2, password);
             ResultSet rs = stm.executeQuery();
-            while(rs.next())
-            {
+            while (rs.next()) {
                 User u = new User();
                 Employee e = new Employee();
                 e.setId(rs.getInt("eid"));
                 e.setName(rs.getString("ename"));
                 u.setEmployee(e);
-                
+
                 u.setUsername(username);
                 u.setId(rs.getInt("uid"));
                 u.setDisplayname(rs.getString("displayname"));
-                
+
                 return u;
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
+        } finally {
             closeConnection();
         }
         return null;
@@ -66,7 +63,30 @@ public class UserDBContext extends DBContext<User> {
 
     @Override
     public User get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        User user = null;
+        try {
+            String sql = """
+                         SELECT [uid]
+                               ,[username]
+                               ,[password]
+                               ,[displayname]
+                           FROM [dbo].[User]
+                         WHERE uid = ?""";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("uid"));
+                user.setUsername(rs.getString("username"));
+                user.setDisplayname(rs.getString("displayname"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
+        }
+        return user;
     }
 
     @Override
