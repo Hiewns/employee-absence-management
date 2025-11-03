@@ -4,12 +4,12 @@
  */
 package dal;
 
-import java.util.ArrayList;
-import model.iam.Role;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.iam.Feature;
+import model.iam.Role;
 
 /**
  *
@@ -42,7 +42,7 @@ public class RoleDBContext extends DBContext<Role> {
                 if(rid != current.getId())
                 {
                     current = new Role();
-                    current.setId(id);
+                    current.setId(rid);
                     current.setName(rs.getString("rname"));
                     roles.add(current);
                 }
