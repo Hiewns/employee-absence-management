@@ -33,7 +33,7 @@ public class RequestDBContext extends DBContext<Request> {
                            FROM [dbo].[RequestForLeave]""";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Request rq = new Request();
                 rq.setId(rs.getInt("rid"));
                 rq.setCreatedby(rs.getInt("created_by"));
@@ -54,7 +54,36 @@ public class RequestDBContext extends DBContext<Request> {
 
     @Override
     public Request get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Request rq = null;
+        try {
+            String sql = """
+                         SELECT [rid]
+                               ,[created_by]
+                               ,[created_time]
+                               ,[from]
+                               ,[to]
+                               ,[reason]
+                               ,[status]
+                           FROM [dbo].[RequestForLeave]
+                           WHERE rid = ?""";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                rq = new Request();
+                rq.setId(rs.getInt("rid"));
+                rq.setCreatedby(rs.getInt("created_by"));
+                rq.setCreatedtime(rs.getTimestamp("created_time"));
+                rq.setFrom(rs.getDate("from"));
+                rq.setTo(rs.getDate("to"));
+                rq.setReason(rs.getString("reason"));
+                rq.setStatus(rs.getInt("status"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
+        }
+        return rq;
     }
 
     @Override
