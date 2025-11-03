@@ -14,7 +14,7 @@
     </head>
     <body>
         <h2>Create Leave Request</h2>
-        <form action="request/create" method="POST">
+        <form action="../request/create" method="POST">
             <label id="createdByLabel">Created by: ${sessionScope.auth.username}</label> <br>
             <label>Role: 
                 <c:forEach items="${roles}" var="role" varStatus="status">
