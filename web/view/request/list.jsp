@@ -15,23 +15,37 @@
     <body>
         <table border="1px">
             <tr>
-                <th>rid</th>
-                <th>created_by</th>
-                <th>created_time</th>
-                <th>from</th>
-                <th>to</th>
-                <th>reason</th>
-                <th>status</th>
+                <th>Created By</th>
+                <th>Created Time</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Processed By</th>
+                <th>Reviewed Time</th>
             </tr>
             <c:forEach items="${requestScope.requests}" var="rq">
-                <tr>
-                    <td>${rq.id}</td>
-                    <td>${rq.createdby}</td>
+                <tr onclick="window.location.href='../request/review?id=${rq.id}'">
+                    <td>${rq.creator.displayname}</td>
                     <td>${rq.createdtime}</td>
                     <td>${rq.from}</td>
                     <td>${rq.to}</td>
                     <td>${rq.reason}</td>
-                    <td>${rq.status}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${rq.status == 0}">
+                                <span style="color: orange;">In Progress</span>
+                            </c:when>
+                            <c:when test="${rq.status == 1}">
+                                <span style="color: green;">Approved</span>
+                            </c:when>
+                            <c:when test="${rq.status == 2}">
+                                <span style="color: red;">Rejected</span>
+                            </c:when>
+                        </c:choose>
+                    </td>
+                    <td>${rq.reviewer.displayname}</td>
+                    <td>${rq.reviewedtime}</td>
                 </tr>
             </c:forEach>
         </table>

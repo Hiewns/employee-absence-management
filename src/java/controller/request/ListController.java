@@ -29,8 +29,8 @@ public class ListController extends BaseRequiredAuthorizationController {
 
     @Override
     protected void processGet(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
-        RequestDBContext db = new RequestDBContext();
-        ArrayList<Request> rq = db.list();
+        RequestDBContext rdb = new RequestDBContext();
+        ArrayList<Request> rq = rdb.list();
         req.setAttribute("requests", rq);
         req.getRequestDispatcher("/view/request/list.jsp").forward(req, resp);
     }
