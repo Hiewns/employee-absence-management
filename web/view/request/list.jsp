@@ -3,7 +3,7 @@
     Created on : Nov 3, 2025, 9:31:36 PM
     Author     : ultsu
 --%>
-
+<%@ taglib prefix="mytag" uri="/WEB-INF/tlds/mytag" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -27,7 +27,7 @@
             <c:forEach items="${requestScope.requests}" var="rq">
                 <tr onclick="window.location.href='../request/review?id=${rq.id}'">
                     <td>${rq.creator.displayname}</td>
-                    <td>${rq.createdtime}</td>
+                    <td><mytag:ToVietnameseDate value="${rq.createdtime}" /></td>
                     <td>${rq.from}</td>
                     <td>${rq.to}</td>
                     <td>${rq.reason}</td>
@@ -45,7 +45,7 @@
                         </c:choose>
                     </td>
                     <td>${rq.reviewer.displayname}</td>
-                    <td>${rq.reviewedtime}</td>
+                    <td><mytag:ToVietnameseDate value="${rq.reviewedtime}" /></td>
                 </tr>
             </c:forEach>
         </table>
