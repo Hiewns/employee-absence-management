@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="mytag" uri="/WEB-INF/tlds/mytag.tld" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -33,8 +34,8 @@
             </c:choose>
         </label> <br>
         <label>Department: ${creatorDept.name}</label> <br>
-        <label>From (date): ${request.from}</label> <br>
-        <label>To (date): ${request.to}</label> <br><br>
+        <label>From (date): <mytag:ToVietnameseDate value="${request.from}"/> </label> <br>
+        <label>To (date): <mytag:ToVietnameseDate value="${request.to}"/></label> <br><br>
         <label>Reason:</label> <br>
         <textarea readonly rows="5" cols="50">${request.reason}</textarea> <br>
         <label>Current Status: 
