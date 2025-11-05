@@ -6,6 +6,7 @@ package model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import model.iam.User;
 
 /**
  *
@@ -13,19 +14,38 @@ import java.sql.Timestamp;
  */
 public class Request extends BaseModel{
     private int createdby;
-    private java.sql.Timestamp createdtime;
-    private java.sql.Date from;
-    private java.sql.Date to;
+    private Timestamp createdtime;
+    private Date from;
+    private Date to;
     private String reason;
     private int status;
-    private int reviewedby;
-    private java.sql.Timestamp reviewedtime;
+    private Integer reviewedby;
+    private Timestamp reviewedtime;
+    
+    private User creator;
+    private User reviewer;
 
-    public int getReviewedby() {
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public User getReviewer() {
+        return reviewer;
+    }
+
+    public void setReviewer(User reviewer) {
+        this.reviewer = reviewer;
+    }
+
+    public Integer getReviewedby() {
         return reviewedby;
     }
 
-    public void setReviewedby(int reviewedby) {
+    public void setReviewedby(Integer reviewedby) {
         this.reviewedby = reviewedby;
     }
 
